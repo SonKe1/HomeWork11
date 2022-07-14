@@ -13,13 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductManagerTest {
 
     ProductRepository repository = new ProductRepository();
-    Product smartphone = new Smartphone(1, " iPhone 13", 1000, "Apple");
+    Product smartphone = new Smartphone(1, "iPhone", 1000, "Apple");
     Product smartphone1 = new Smartphone(2, " samsung a52", 850, "Samsung");
     Product smartphone2 = new Smartphone(3, "sony xperia1", 980, "Sony");
     Product book = new Book(4, "Код да Винчи", 110, "Дэн Браун");
     Product book1 = new Book(5, "Жизнь взаймы", 150, "Ремарк");
     Product book2 = new Book(6, "Война и мир", 120, "Толстой");
-    Product smartphone3 = new Smartphone(7, " iPhone 8", 800, "Apple");
+    Product smartphone3 = new Smartphone(7, "iPhone", 800, "Apple");
 
 
     @Test
@@ -42,6 +42,19 @@ class ProductManagerTest {
         repository.save(book1);
         String text = "Колобок";
         Product[] expected = {};
+        Product[] actual = manager.searchBy(text);
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldSearchIfMoreThanOneProduct() {
+        ProductManager manager = new ProductManager(repository);
+        repository.save(book = new Book(4, "Код да Винчи", 110, "Дэн Браун"));
+        repository.save(smartphone = new Smartphone(1, "iPhone", 1000, "Apple"));
+        repository.save(book1 = new Book(5, "Жизнь взаймы", 150, "Ремарк"));
+        repository.save(smartphone3 = new Smartphone(7, "iPhone", 800, "Apple"));
+        String text = "iPhone";
+        Product[] expected = {smartphone,smartphone3};
         Product[] actual = manager.searchBy(text);
         assertArrayEquals(expected, actual);
     }
